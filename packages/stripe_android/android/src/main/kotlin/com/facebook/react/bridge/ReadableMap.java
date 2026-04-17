@@ -43,10 +43,7 @@ public class ReadableMap extends Dynamic {
 
     @Override
     public boolean isEmpty() {
-        if (map.length() > 0) {
-            return false;
-        }
-        return super.isEmpty();
+        return size() == 0;
     }
 
     @Override

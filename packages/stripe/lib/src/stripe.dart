@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:stripe_platform_interface/stripe_platform_interface.dart';
-import 'package:meta/meta.dart';
 
 /// [Stripe] is the facade of the library and exposes the operations that can be
 /// executed on the Stripe platform.
@@ -285,6 +284,14 @@ class Stripe {
     } on StripeError catch (error) {
       throw StripeError(message: error.message, code: error.message);
     }
+  }
+
+  /// Creates a Radar session.
+  ///
+  /// Returns a [RadarSession] containing the session ID.
+  Future<RadarSession> createRadarSession() async {
+    await _awaitForSettings();
+    return await _platform.createRadarSession();
   }
 
   /// Creates a single-use token that represents a credit card’s details.
@@ -733,6 +740,16 @@ class Stripe {
     } on StripeError {
       rethrow;
     }
+  }
+
+  /// Retrieve and clear any pending Stripe Connect deep link URLs.
+  ///
+  /// **Android-only.** Returns any `stripe-connect://` URLs captured by the
+  /// native deep link interceptor since the last poll. On iOS this always
+  /// returns an empty list and on Web it throws [WebUnsupportedError].
+  Future<List<String>> pollAndClearPendingStripeConnectUrls() async {
+    await _awaitForSettings();
+    return _platform.pollAndClearPendingStripeConnectUrls();
   }
 
   /// Initializes the customer sheet with the provided [parameters].

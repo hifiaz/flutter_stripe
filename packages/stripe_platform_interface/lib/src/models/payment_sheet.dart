@@ -129,6 +129,21 @@ abstract class SetupPaymentSheetParameters with _$SetupPaymentSheetParameters {
 
     /// Configuration for custom payment methods in PaymentSheet
     CustomPaymentMethodConfiguration? customPaymentMethodConfiguration,
+
+    ///By default, PaymentSheet offers a card scan button within the new card entry form.
+    /// When opensCardScannerAutomatically is set to true,
+    /// the card entry form will initialize with the card scanner already open.
+    /// Defaults to false.
+    bool? opensCardScannerAutomatically,
+
+    /// A map of payment method types to their terms display configuration.
+    /// Controls whether legal agreements (e.g. card mandate disclaimers) are shown for each payment method type.
+    /// Keys are snake_case payment method type strings (e.g. "card", "us_bank_account").
+    /// See https://docs.stripe.com/api/payment_methods/object#payment_method_object-type for the full list of values.
+    /// Values are `TermsDisplay.automatic` or `TermsDisplay.never`.
+    /// If not set, defaults to `TermsDisplay.automatic` for all payment method types.
+    @JsonKey(toJson: _termsDisplayToJson, fromJson: _termsDisplayFromJson)
+    Map<String, TermsDisplay>? termsDisplay,
   }) = _SetupParameters;
 
   factory SetupPaymentSheetParameters.fromJson(Map<String, dynamic> json) =>
@@ -645,6 +660,22 @@ List<int> _cardBrandListToJson(List<CardBrand>? list) {
   return list.map((e) => e.brandValue).toList();
 }
 
+Map<String, String>? _termsDisplayToJson(Map<String, TermsDisplay>? map) {
+  if (map == null) return null;
+  return map.map((key, value) => MapEntry(key, value.name));
+}
+
+Map<String, TermsDisplay>? _termsDisplayFromJson(Map<String, dynamic>? json) {
+  if (json == null) return null;
+  return json.map((key, value) => MapEntry(
+        key,
+        TermsDisplay.values.firstWhere(
+          (e) => value is String && e.name == value,
+          orElse: () => TermsDisplay.automatic,
+        ),
+      ));
+}
+
 /// Card brand categories that can be allowed or disallowed
 enum CardBrandCategory {
   /// Visa branded cards
@@ -671,6 +702,15 @@ enum CardBrandAcceptanceFilter {
 
   /// Accept all card brands except the specified ones
   disallowed,
+}
+
+///Controls whether legal terms (e.g. mandate disclaimers) are displayed for a payment method.
+enum TermsDisplay {
+  /// Show legal agreements only when necessary.
+  automatic,
+
+  /// Never show legal agreements.
+  never,
 }
 
 @freezed

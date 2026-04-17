@@ -1,3 +1,23 @@
+## 12.6.0
+
+**Features**:
+- added createRadarSession to support stripe radar sessions
+
+**Fixes**:
+- Bumped compile SDK android to sdk 36
+- iOS card details not complete issue on cardfield
+- #2385: correct termsDisplay type to Map<String, TermsDisplay>
+
+
+## 12.5.0
+**Features**:
+- Sync with Stripe React Native [0.61.0](https://github.com/stripe/stripe-react-native/releases/tag/v0.61.0)
+
+## 12.4.0
+**Fixes**
+- #2347: Fix card details not complete for dangerously update card details
+- #2350: Fix invalid methodcall on Android for cardfield
+
 ## 12.3.0
 
 **Features**

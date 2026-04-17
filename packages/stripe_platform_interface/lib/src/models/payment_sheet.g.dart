@@ -81,6 +81,10 @@ _SetupParameters _$SetupParametersFromJson(
       : CustomPaymentMethodConfiguration.fromJson(
           json['customPaymentMethodConfiguration'] as Map<String, dynamic>,
         ),
+  opensCardScannerAutomatically: json['opensCardScannerAutomatically'] as bool?,
+  termsDisplay: _termsDisplayFromJson(
+    json['termsDisplay'] as Map<String, dynamic>?,
+  ),
 );
 
 Map<String, dynamic> _$SetupParametersToJson(
@@ -115,6 +119,8 @@ Map<String, dynamic> _$SetupParametersToJson(
   'cardFundingFiltering': instance.cardFundingFiltering?.toJson(),
   'customPaymentMethodConfiguration': instance.customPaymentMethodConfiguration
       ?.toJson(),
+  'opensCardScannerAutomatically': instance.opensCardScannerAutomatically,
+  'termsDisplay': _termsDisplayToJson(instance.termsDisplay),
 };
 
 const _$ThemeModeEnumMap = {
